@@ -1,0 +1,106 @@
+import sys
+import numpy as np
+
+import pandas as pd
+from pandas import DataFrame
+import seaborn as sns
+from scipy import stats
+import matplotlib.pyplot as plt
+from math import sqrt
+
+HY_data = pd.read_csv('C:/Users/Jialin Zhang/Downloads/HY_Universe_corporate bond.csv')
+                   
+#1 print dimension of data frame
+nrow = HY_data.shape[0]
+ncol = HY_data.shape[1]
+print("Number of Rows of Data = ", HY_data.shape[0]) 
+print("Number of Columns of Data = ", HY_data.shape[1])
+
+#2 print histogram 
+sns.set()
+_ = plt.hist(HY_data['LIQ SCORE'],bins=15)
+_ = plt.xlabel('LIQ SCORE')
+_ = plt.ylabel('count')
+plt.show()
+
+#3 print head and tail of data frame
+print(HY_data.head())
+print(HY_data.tail())
+
+#4 print summary of data frame
+summary = HY_data.describe()
+print(summary)
+
+#5 Bee Swarm Plot
+sns.set()
+_ = sns.swarmplot(x='bond_type', y='Issued Amount', data = HY_data)
+
+_ = plt.xlabel('bond_type')
+_ = plt.ylabel('Issued Amount')
+plt.show()
+
+
+#6 ECDF
+def ecdf(data):
+    # Number of data points: n
+    n = len(data)
+    # x-data for the ECDF: x
+    x = np.sort(data)
+    # y-data for the ECDF: y
+    y = np.arange(1, n+1) / n
+    return x, y
+
+#x_vers, y_vers = ecdf(HY_data['LIQ SCORE'])
+x_jhk, y_jhk = ecdf(HY_data['Months in JNK'])
+x_hyg, y_hyg = ecdf(HY_data['Months in HYG'])
+x_both, y_both = ecdf(HY_data['Months in Both'])
+
+plt.plot(x_jhk, y_jhk, marker = '.', linestyle ='none')
+plt.plot(x_hyg, y_hyg, marker = '.', linestyle ='none')
+plt.plot(x_both, y_both, marker = '.', linestyle ='none')
+
+plt.legend(('JHK', 'HYG', 'Both'), loc='lower right')
+plt.xlabel('Months')
+plt.ylabel('ECDF')
+
+plt.show()
+
+#7 Quantile‐Quantile Plot
+from scipy import stats 
+stats.probplot(HY_data['LIQ SCORE'], dist="norm",plot=plt)
+plt.show()
+
+#8 scatter Plot
+plt.scatter(HY_data['Months in JNK'],HY_data['LIQ SCORE'])
+plt.scatter(HY_data['Months in HYG'],HY_data['LIQ SCORE'])
+plt.scatter(HY_data['Months in Both'],HY_data['LIQ SCORE'])
+
+plt.show()
+
+#9 Box Plot
+
+sns.boxplot(x='IN_ETF',y='Issued Amount', data=HY_data)
+plt.xlabel('IN_ETF')
+plt.ylabel('Issued Amount')
+plt.show()
+
+#10 Parallel coordinates
+from pandas.plotting import parallel_coordinates
+data = HY_data[:200,5:9]
+parallel_coordinates(data,'S_and_P')
+plt.show()
+
+#11 Heat Map
+
+corMat = DataFrame(HY_data.corr())
+
+plt.pcolor(corMat)
+plt.show()
+
+
+
+
+print("My name is Jialin Zhang")
+print("My NetID is: jialin6")
+print("I hereby certify that I have read the University policy on Academic Integrity and that I am not in violation.")
+######STOP HERE######################
