@@ -1,0 +1,195 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+import numpy as np
+from pandas import DataFrame
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import Ridge
+from sklearn.linear_model import Lasso
+from sklearn import preprocessing
+from sklearn.metrics import mean_squared_error
+
+df = pd.read_csv('C:/Users/Jialin Zhang/Downloads/housing.csv')
+
+
+df.columns = ['CRIM','ZN','INDUS','CHAS','NOX','RM','AGE',
+              'DIS','RAD','TAX','PTRATIO','B','LSTAT','MEDV']
+
+print(df.head())
+
+
+#print bee swarm plot
+sns.set()
+_ = sns.swarmplot(x='B', y='MEDV', data = df)
+
+_ = plt.xlabel('B')
+_ = plt.ylabel('MEDV')
+plt.show()
+
+
+# print histogram 
+sns.set()
+_ = plt.hist(df['MEDV'],bins=15)
+_ = plt.xlabel('MEDV')
+_ = plt.ylabel('count')
+plt.show()
+
+
+
+#split the train and test sets
+X = df[df.columns[:-1]].values
+y = df['MEDV'].values
+
+X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                    test_size = 0.2, random_state=42) 
+
+#standardize the features
+scaler = preprocessing.StandardScaler().fit(X_train)
+X_train = scaler.transform(X_train)
+X_test = scaler.transform(X_test)
+
+#create the regressor
+reg = LinearRegression()
+#fit the regressor to the training data
+reg.fit(X_train,y_train)
+
+#coefficients
+coef = reg.coef_
+print('coefficient:',coef)
+
+yinter = reg.intercept_
+print('y-intercept:',yinter)
+
+#plot the residual errors
+y_train_pred = reg.predict(X_train)
+y_test_pred = reg.predict(X_test)
+
+plt.scatter(y_train_pred, y_train_pred - y_train,c='blue',marker='o',
+            label='Training data')
+plt.scatter(y_test_pred, y_test_pred - y_test, c='lightgreen',
+            label='Test data')
+
+plt.xlabel('Predicted values')
+plt.ylabel('Residuals')
+plt.legend(loc='upper left')
+plt.hlines(y = 0,xmin=-10,xmax=50, color = 'black',lw=2)
+plt.xlim([-10,50])
+plt.show()
+
+#compute R^2
+R2_train = reg.score(X_train,y_train)
+R2_test = reg.score(X_test,y_test)
+print("R^2 training:{}".format(R2_train))
+print("R^2 test:{}".format(R2_test))
+
+#compute Mean Squared Error
+mse_train = mean_squared_error(y_train,y_train_pred)
+mse_test = mean_squared_error(y_test, y_test_pred)
+print("MSE training:{}".format(mse_train))
+print("MSE test:{}".format(mse_test))
+
+
+
+
+#Part 3.1 Ridge
+X = df[df.columns[:-1]].values
+y = df['MEDV'].values
+
+X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                    test_size = 0.2, random_state=42) 
+
+ridge = Ridge(alpha=0.01, normalize=True) 
+ridge.fit(X_train, y_train) 
+ridge_pred = ridge.predict(X_test) 
+ridge.score(X_test, y_test)
+
+#coefficients
+coef = ridge.coef_
+print('coefficient:',coef)
+
+yinter = ridge.intercept_
+print('y-intercept:',yinter)
+
+#plot the residual errors
+y_train_pred = ridge.predict(X_train)
+y_test_pred = ridge.predict(X_test)
+
+plt.scatter(y_train_pred, y_train_pred - y_train,c='blue',marker='o',
+            label='Training data')
+plt.scatter(y_test_pred, y_test_pred - y_test, c='lightgreen',
+            label='Test data')
+
+plt.xlabel('Predicted values')
+plt.ylabel('Residuals')
+plt.legend(loc='upper left')
+plt.hlines(y = 0,xmin=-10,xmax=50, color = 'black',lw=2)
+plt.xlim([-10,50])
+plt.show()
+
+#compute R^2
+R2_train = ridge.score(X_train,y_train)
+R2_test = ridge.score(X_test,y_test)
+print("R^2 training:{}".format(R2_train))
+print("R^2 test:{}".format(R2_test))
+
+#compute Mean Squared Error
+mse_train = mean_squared_error(y_train,y_train_pred)
+mse_test = mean_squared_error(y_test, y_test_pred)
+print("MSE training:{}".format(mse_train))
+print("MSE test:{}".format(mse_test))
+
+#Part 3.2 lasso
+X = df[df.columns[:-1]].values
+y = df['MEDV'].values
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, 
+                                    test_size = 0.2, random_state=42) 
+lasso = Lasso(alpha=0.01, normalize=True) 
+lasso.fit(X_train, y_train) 
+lasso_pred = lasso.predict(X_test) 
+lasso.score(X_test, y_test)
+
+#coefficients
+coef = lasso.coef_
+print('coefficient:',coef)
+
+yinter = lasso.intercept_
+print('y-intercept:',yinter)
+
+#plot the residual errors
+y_train_pred = lasso.predict(X_train)
+y_test_pred = lasso.predict(X_test)
+
+plt.scatter(y_train_pred, y_train_pred - y_train,c='blue',marker='o',
+            label='Training data')
+plt.scatter(y_test_pred, y_test_pred - y_test, c='lightgreen',
+            label='Test data')
+
+plt.xlabel('Predicted values')
+plt.ylabel('Residuals')
+plt.legend(loc='upper left')
+plt.hlines(y = 0,xmin=-10,xmax=50, color = 'black',lw=2)
+plt.xlim([-10,50])
+plt.show()
+
+#compute R^2
+R2_train = lasso.score(X_train,y_train)
+R2_test = lasso.score(X_test,y_test)
+print("R^2 training:{}".format(R2_train))
+print("R^2 test:{}".format(R2_test))
+
+#compute Mean Squared Error
+mse_train = mean_squared_error(y_train,y_train_pred)
+mse_test = mean_squared_error(y_test, y_test_pred)
+print("MSE training:{}".format(mse_train))
+print("MSE test:{}".format(mse_test))
+
+print("My name is {Jialin Zhang}")
+print("My NetID is: {jialin6}")
+print("I hereby certify that I have read the University policy on Academic Integrity and that I am not in violation.")
+
+
+
+
+
