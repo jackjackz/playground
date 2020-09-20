@@ -18,6 +18,10 @@ df.columns = ['CRIM','ZN','INDUS','CHAS','NOX','RM','AGE',
 
 print(df.head())
 
+cols = ['LSTAT','INDUS','NOX','RM','MEDV']
+sns.pairplot(df[cols],size = 2.5)
+plt.tight_layout()
+plt.show()
 
 #print bee swarm plot
 sns.set()
