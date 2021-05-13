@@ -98,13 +98,11 @@ int main()
 	double price_sum, price, ci;
 	price_sum = 0;
 
-	double risk_free_rate = 0.003866;
-	double strike_price = 1870;
+	double risk_free_rate = 0.01;
+	double strike_price = 100;
 	double expiration_time = 1.0 / 52;
-	double initial_stock_price = 1868.99;
-	double volatility = 0.2979;
-	double dividend_yield = 0.0232;
-	int sample_size = 10000000;
+	double volatility = 0.20;
+	
 
 	double x_bar = 0, y_bar = 0, se;
 	double upper, lower, z_score = 1.96;
