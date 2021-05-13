@@ -13,25 +13,6 @@
 #include <algorithm>
 #include <time.h>
 #include <vector>
-using namespace std;
-
-//barrier_option_analytical.cpp
-
-/*
-barrier option pricing, sulin suo, yong wang
-*/
-
-/*
-2 put, call
-2 in,out
-2 down,up
-2*2*2 = 8 - 8 options type
-*/
-
-
-#include <cmath>
-#include <algorithm>
-#include <iostream>
 #include <Normals.h>
 #include <BlackScholesFormulas.h>
 #include <barrier_options_analytical.h>
